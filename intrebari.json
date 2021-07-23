@@ -1,0 +1,28 @@
+{
+    "intrebari":[
+        {
+            "intrebare": "Ce varsta ai?",
+            "variante": ["sub 20 ani", "intre 20 si 50 ani", "peste 50 ani"]
+        },
+        {
+            "intrebare": "Ai gust?",
+            "variante": ["Da", "Nu"]
+        },
+        {
+            "intrebare": "Ai frisoane?",
+            "variante": ["Da", "Nu"]
+        },
+        {
+            "intrebare": "Ai miros?",
+            "variante": ["Da", "Nu"]
+        },
+        {
+            "intrebare": "Ai probleme respiratorii?",
+            "variante": ["Da", "Nu"]
+        },
+        {
+            "intrebare": "Ai dureri de cap?",
+            "variante": ["Da", "Nu"]
+        }
+    ]
+}

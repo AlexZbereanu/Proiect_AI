@@ -1,0 +1,23 @@
+<%- contentFor('continut')%>
+<form action="/rezultat-chestionar" method="POST">
+<ol id="chestionar">
+    <% for(var i=0; i < intrebari.length;i++){ %>
+        <div class="varianta">
+                <li><%=intrebari[i].intrebare%></li>
+                <% for(var j = 0; j <intrebari[i].variante.length ; j++){
+            
+                    var name = "type" + i.toString();
+                    var id = "input" + i.toString()+":"+j.toString();
+                    var type = 'radio';
+                %>
+                <div class="varianta-content">
+                    <input type="<%=type%>" name="<%=name%>" id="<%=id%>" value="<%=intrebari[i].variante[j] %>">
+                    <label for="<%=id%>"><%=intrebari[i].variante[j] %></label>
+                </div>
+            <% }%>
+        </div> 
+    <% } %>
+    <br><br>
+    <button type="submit">Trimite raspunsuri!</button>
+</ol>
+</form>

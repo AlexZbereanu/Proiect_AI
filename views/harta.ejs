@@ -1,0 +1,24 @@
+<%- contentFor('continut')%>
+<script>
+    function loadMap() {
+        
+        var mapOptions = {
+        //center:new google.maps
+        zoom:7
+        }
+        
+        var map = new google.maps.Map(document.getElementById("sample"),mapOptions);
+        var services = new google.maps.places.PlaceService(map);
+        var marker = new google.maps.Marker({
+        position: services,
+        map: map,
+        });
+    }
+</script>
+
+   
+<body onload = "loadMap()">
+    <div id = "sample" style = "width:1520px; height:800px;"></div>
+   </body>
+   
+</html>
