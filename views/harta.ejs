@@ -3,14 +3,13 @@
     function loadMap() {
         
         var mapOptions = {
-        //center:new google.maps
-        zoom:7
+        center:new google.maps.LatLng(47.154, 27.594),
+        zoom:7,
         }
         
         var map = new google.maps.Map(document.getElementById("sample"),mapOptions);
-        var services = new google.maps.places.PlaceService(map);
         var marker = new google.maps.Marker({
-        position: services,
+        position: new google.maps.LatLng(47.154, 27.594),
         map: map,
         });
     }
@@ -18,7 +17,7 @@
 
    
 <body onload = "loadMap()">
-    <div id = "sample" style = "width:1520px; height:800px;"></div>
+    <div id = "sample" style = "width:580px; height:400px; float:right;"></div>
+    <%=result%>
    </body>
-   
-</html>
+  
