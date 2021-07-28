@@ -50,27 +50,63 @@ app.get('/chestionar', (req, res) => {
 
 app.post('/rezultat-chestionar', (req, res) => {
     
-	console.log(req.body);
-    
-    var result ; //"Varsta: " + JSON.stringify(req.body.type0) +
-     //"<br> Gust: " + JSON.stringify(req.body.type1) +
-      //"<br> Frisoane: " + JSON.stringify(req.body.type2) +
-       //"<br> Miros: " + JSON.stringify(req.body.type3) +
-       //"<br> Probleme respiratorii: " + JSON.stringify(req.body.type4) +
-       //"<br> Durere de cap: " + JSON.stringify(req.body.type5) ;
+	let gust, miros, frisoane, probResp, DCap, varsta;
+    let out = "";
+    let result ;
 
+    if(JSON.stringify(req.body.type0) == "\"sub 20 ani\""){
+        varsta = 20;
+    }else if(JSON.stringify(req.body.type0) == "\"intre 20 si 50 ani\""){
+        varsta = 35;
+    }else{
+        varsta = 50;
+    }
+
+    if(JSON.stringify(req.body.type1) == "\"Nu\""){
+        gust = 0.0;
+    }else{
+        gust = 1.0;
+    }
+
+    if(JSON.stringify(req.body.type2) == "\"Nu\""){
+        frisoane = 0.0;
+    }else{
+        frisoane = 1.0;
+    }
+    if(JSON.stringify(req.body.type3) == "\"Nu\""){
+        miros = 0.0;
+    }else{
+        miros = 1.0;
+    }
+    
+    if(JSON.stringify(req.body.type4) == "\"Nu\""){
+        probResp = 0.0;
+    }else{
+        probResp = 1.0;
+    }
+    if(JSON.stringify(req.body.type5) == "\"Nu\""){
+        DCap = 0.0;
+    }else{
+        DCap = 1.0;
+    }
+        
     const getData = async() => {
         net.train(data, {log: true});
     }
 
-    getData().then(result =  net.run({a:1.0, b:0.0}).h);
+    getData().then(result =  net.run({a:gust, b:miros}).h);
+    if(result <= 0.25){
+        out = "O probabilitate foarte mare sa suferiti de covid!";
+    }
+    else if(result > 0.25 & result <= 0.75){
+        out = "O probabilitate foarte mare sa suferiti de o simpla raceala!";
+    }else{
+        out = "Sunteti sanatos!";
+    }
     
-    res.render('harta', {result: result});
+    res.render('harta', {result: out});
 	
 });
 
-app.get('/harta', (req, res) =>{
-    res.render('harta');
-});
 
 app.listen(port, () => console.log(`Serverul rulează la adresa http://localhost:${port}`));
