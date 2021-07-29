@@ -2,7 +2,14 @@ const express = require('express');
 const expressLayouts = require('express-ejs-layouts');
 const bodyParser = require('body-parser')
 const brain = require('brain.js')
-
+const mysql = require('mysql');
+var con = mysql.createConnection({
+    host: "localhost",
+    user: "root",
+    password: "",
+    port: 3306,
+    database: "training"
+});
 const app = express();
 
 const port = 6789;
@@ -28,22 +35,33 @@ let listaIntrebari = [];
 for(var i=0; i < intrebare.intrebari.length;i++)
 	listaIntrebari.push(intrebare.intrebari[i])
 
-// 1=> sanatos    0.5=> racit,    0 => covid
-var data = [{ input: {a: 1.0, b: 1.0}, output:{h: 1.0}},
-    { input: {a: 1.0, b: 0.0}, output:{h: 0.5}},
-    { input: {a: 0.0, b: 0.0}, output:{h: 0.0} }
-]
-
 var net = new brain.NeuralNetwork();
+var info=[]; // ! pentru scriere in bd
+var data ; // ! pentru citire din bd
 
-// la accesarea din browser adresei http://localhost:6789/ se va returna textul 'Hello World'
-// proprietățile obiectului Request - req - https://expressjs.com/en/api.html#req
-// proprietățile obiectului Response - res - https://expressjs.com/en/api.html#res
 app.get('/', (req,res) => {
     res.render('index');
 });
 
 app.get('/chestionar', (req, res) => {
+
+    // 1=> sanatos    0.5=> racit,    0 => covid
+    //Ce vreau: lista de JSON-uri
+    
+    //var data = [{ input: {a: 1.0, b: 1.0}, output:{h: 1.0}},
+    //{ input: {a: 1.0, b: 0.0}, output:{h: 0.5}},
+    //{ input: {a: 0.0, b: 0.0}, output:{h: 0.0} }]
+
+    //Tu ai pus!!!
+    //var data = "[{ input: {a: 1.0, b: 1.0}, output:{h: 1.0}},"
+      //  "{ input: {a: 1.0, b: 0.0}, output:{h: 0.5}},"
+       //"{ input: {a: 0.0, b: 0.0}, output:{h: 0.0} }]"
+
+    //console.log(data);
+    //a = data[1];
+    b = JSON.parse(JSON.stringify(data));
+    console.log(b);
+
 	res.render('chestionar', {intrebari: listaIntrebari});
 });
 
@@ -73,6 +91,7 @@ app.post('/rezultat-chestionar', (req, res) => {
     }else{
         frisoane = 1.0;
     }
+
     if(JSON.stringify(req.body.type3) == "\"Nu\""){
         miros = 0.0;
     }else{
@@ -84,6 +103,7 @@ app.post('/rezultat-chestionar', (req, res) => {
     }else{
         probResp = 1.0;
     }
+
     if(JSON.stringify(req.body.type5) == "\"Nu\""){
         DCap = 0.0;
     }else{
@@ -94,7 +114,7 @@ app.post('/rezultat-chestionar', (req, res) => {
         net.train(data, {log: true});
     }
 
-    getData().then(result =  net.run({a:gust, b:miros}).h);
+    getData().then(result =  net.run({a:varsta, b:gust, c:miros, d: frisoane, e: probResp, f: DCap}).h);
     if(result <= 0.25){
         out = "O probabilitate foarte mare sa suferiti de covid!";
     }
@@ -108,5 +128,106 @@ app.post('/rezultat-chestionar', (req, res) => {
 	
 });
 
+app.get('/adaugare_date',(req,res)=>{
+    
+    //!console.log("aici")
+
+    fs.readFile('training.txt', (err, data) => {
+        if (err) throw err;
+        var array = data.toString().split("\r\n")
+        //console.log("aici") 
+        for (let i=0;i<array.length;i++) {
+            //console.log(array.length)
+            let temp = array[i].split(" ")
+            info[i]=[]
+            for (let j=0;j<temp.length;j++){
+                info[i][j] = temp[j];
+            }
+            con.query("INSERT INTO `simptone`( `varsta`, `gust`, `miros`, `frisoane`, `probleme_respiratorii`, `dureri_de_cap`, `output`) VALUES ('" + info[i][0] + "','" + info[i][1] + "','" + info[i][2] + "','" + info[i][3] + "','" + info[i][4] + "','" + info[i][5] + "','" + info[i][6] + "')", (err, result) => {
+                if (err) throw err;
+            })
+            
+        }
+    })
+    res.redirect('/extragere_date')
+})
+
+app.get('/error',(req,res)=>{
+    res.send("some error");
+    
+})
+app.get('/extragere_date',(req,res)=>{
+    var date ="[";
+    const promise = new Promise((resolve,reject)=>{
+        con.query("SELECT  `varsta`, `gust`, `miros`, `frisoane`, `probleme_respiratorii`, `dureri_de_cap`, `output` FROM `simptone` WHERE 1",(err,result)=>{
+            if(err) reject(err);
+            informatii=JSON.parse(JSON.stringify(result))
+            //console.log(informatii.length)
+            for(let i=0;i<informatii.length-1;i++){
+                let inputt = {
+                    a: informatii[i].varsta,
+                    b: informatii[i].gust,
+                    c: informatii[i].miros,
+                    d: informatii[i].frisoane,
+                    e: informatii[i].probleme_respiratorii,
+                    f: informatii[i].dureri_de_cap
+                }
+                let outputt={
+                    h: informatii[i].output
+                }
+    
+                date += "{"; 
+                date += "input:";
+                date += (JSON.stringify(inputt));
+                date +=",";
+                date +="output:";
+                date += (JSON.stringify(outputt));
+                date +="},";
+                //console.log(date);   
+                
+            }
+            let inputt = {
+                a: informatii[informatii.length-1].varsta,
+                b: informatii[informatii.length-1].gust,
+                c: informatii[informatii.length-1].miros,
+                d: informatii[informatii.length-1].frisoane,
+                e: informatii[informatii.length-1].probleme_respiratorii,
+                f: informatii[informatii.length-1].dureri_de_cap
+            }
+            let outputt={
+                h: informatii[informatii.length-1].output
+            }
+    
+            date += "{"; 
+            date += "input:";
+            date += (JSON.stringify(inputt));
+            date +=",";
+            date +="output:";
+            date += (JSON.stringify(outputt));
+            date +="}]";
+            //console.log(date);
+           // console.log("in promise ")
+            //data=JSON.parse(JSON.stringify(date));
+           // console.log(date);
+            resolve(date)
+        })
+    }).then(value=>{
+        //console.log("in primul then ")
+        //console.log(value)
+    
+        data=JSON.parse(JSON.stringify(value));
+        //console.log(data);
+    
+    }).then( () =>{ 
+       // console.log("in al doilea then");
+        //console.log(data);
+        res.redirect('/chestionar')
+
+    })
+    .catch(err=>{
+        console.log(err)
+        res.redirect('/error')
+    });    
+})
 
 app.listen(port, () => console.log(`Serverul rulează la adresa http://localhost:${port}`));
