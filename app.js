@@ -48,6 +48,37 @@ app.get('/chestionar', (req, res) => {
 	res.render('chestionar', {intrebari: listaIntrebari});
 });
 
+app.get('/articole', (req, res) => {
+    res.render('articole', {});
+});
+
+app.get('/index', (req, res) => {
+    res.render('index', {});
+});
+
+app.get('/despre', (req, res) => {
+    res.render('despre', {});
+});
+
+app.get('/contact', (req, res) => {
+    res.render('contact', {});
+});
+
+app.get('/covid', (req, res) => {
+    res.render('covid', {});
+});
+
+app.get('/covid1', (req, res) => {
+    res.render('covid1', {});
+});
+
+app.get('/flu', (req, res) => {
+    res.render('flu', {});
+});
+
+app.get('/seama', (req, res) => {
+    res.render('seama', {});
+});
 
 app.post('/rezultat-chestionar', (req, res) => {
     
@@ -70,24 +101,24 @@ app.post('/rezultat-chestionar', (req, res) => {
     }
 
     if(JSON.stringify(req.body.type2) == "\"Nu\""){
-        frisoane = 0.0;
-    }else{
-        frisoane = 1.0;
-    }
-
-    if(JSON.stringify(req.body.type3) == "\"Nu\""){
         miros = 0.0;
     }else{
         miros = 1.0;
     }
+
+    if(JSON.stringify(req.body.type3) == "\"Da\""){
+        frisoane = 0.0;
+    }else{
+        frisoane = 1.0;
+    }
     
-    if(JSON.stringify(req.body.type4) == "\"Nu\""){
+    if(JSON.stringify(req.body.type4) == "\"Da\""){
         probResp = 0.0;
     }else{
         probResp = 1.0;
     }
 
-    if(JSON.stringify(req.body.type5) == "\"Nu\""){
+    if(JSON.stringify(req.body.type5) == "\"Da\""){
         DCap = 0.0;
     }else{
         DCap = 1.0;
@@ -113,21 +144,18 @@ app.post('/rezultat-chestionar', (req, res) => {
 });
 
 app.get('/adaugare_date',(req,res)=>{
-    
-    //!console.log("aici")
 
     fs.readFile('training.txt', (err, data) => {
         if (err) throw err;
-        var array = data.toString().split("\r\n")
-        //console.log("aici") 
+        var array = data.toString().split("\n")
         for (let i=0;i<array.length;i++) {
-            //console.log(array.length)
             let temp = array[i].split(" ")
             info[i]=[]
             for (let j=0;j<temp.length;j++){
                 info[i][j] = temp[j];
             }
-            con.query("INSERT INTO `simptone`( `varsta`, `gust`, `miros`, `frisoane`, `probleme_respiratorii`, `dureri_de_cap`, `output`) VALUES ('" + info[i][0] + "','" + info[i][1] + "','" + info[i][2] + "','" + info[i][3] + "','" + info[i][4] + "','" + info[i][5] + "','" + info[i][6] + "')", (err, result) => {
+            con.query("INSERT INTO `simptone`( `varsta`, `gust`, `miros`, `frisoane`, `probleme_respiratorii`, `dureri_de_cap`, `output`)\
+            VALUES ('" + info[i][0] + "','" + info[i][1] + "','" + info[i][2] + "','" + info[i][3] + "','" + info[i][4] + "','" + info[i][5] + "','" + info[i][6] + "')", (err, result) => {
                 if (err) throw err;
             })
             

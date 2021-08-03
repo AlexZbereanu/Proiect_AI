@@ -1,19 +1,199 @@
-html{
+*{
     margin: 0px;
-    
+    padding: 0;
+    font-family: sans-serif;
 }
 
 body{
     font-size: 20px;
-    color: rgb(65, 63, 53);
+    color: white;
     margin: 0px;
     text-align: center;
-    background: url("https://collectieftest.aegee-delft.nl/wp-content/uploads/2019/01/site-background-1.png");
+    background-image:linear-gradient(rgba(0, 7, 8, 0.75), rgba(197,235,247,0.75)),url("../imagini/wallpaper.jpg"); 
+    background-size: cover;
+    background-position: center;
+
+}
+
+.navbar{
+    display: flex;
+    justify-content: center;
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
+    background-image: linear-gradient(rgba(0,0,0,0.75), rgba(34, 33, 33, 0));
+}
+
+.navbar ul li{
+    display: inline-block;
+    color: white;
+    text-decoration: none;
+    text-transform: uppercase;
+    padding: 35px 30px;
+    font-size: 20px;
+    color:black;
+    letter-spacing: 4px;
+    position: relative;
+}
+
+.navbar ul li a{
+    display: inline-block;
+    color: grey;
+    text-decoration: none;
+}
+
+.navbar:hover{
+    background-color:  linear-gradient(rgba(0,0,0,0.75), rgba(34, 33, 33, 0));;
+    color: black;
+}
+
+.navbar ul li::after{
+    content: '';
+    height: 3px;
+    width:0;
+    background: white;
+    position: absolute;
+    left:0;
+    bottom: 0;
+    transition: 0.5s;
+}
+
+.navbar ul li:hover::after{
+    width: 100%;
+
+}
+
+.content{
+    width: 100%;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    text-align: center;
+    color: #fff;
+}
+
+.content h1{
+    font-size: 70px;
+    margin-top: 80px;
+}
+
+.content p{
+    margin: 20px auto;
+    font-weight: 100;
+    line-height: 25px;
+}
+
+
+button{
+    width: 200px;
+    padding: 15px 0;
+    text-align: center;
+    margin: 20px 10px;
+    border-radius: 25px;
+    font-weight: bold;
+    border: 2px solid grey;
+    background: transparent;
+    color: #fff;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+
+
+span{
+    background: black;
+    height: 100%;
+    width: 0;
+    border-radius: 25px;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    z-index: -1;
+    transition: 0.5s;
+    
+}
+
+button a{
+    color:white;
+    text-decoration: none;
+}
+
+button:hover span{
+    width: 100%;
+}
+
+button:hover{
+    border:none;
+}
+
+
+.post{
+    width:95%;
+    height:270px;
+    margin: 10px auto;
+    border-radius: 5px;
+    background-image: linear-gradient(rgba(0,0,0,0.75), rgba(34, 33, 33, 0));
+    position: relative;
+}
+
+.post .read_more{
+    position: absolute;
+    bottom: 15px;
+    right: 15px;
+    height: 30px;
+    width: 200px;
+    border: 2px solid black;
+    background:transparent;
+    border-radius: 120px;
+    color: white;
+    text-decoration: none;
+}
+
+.post .read_more:hover{
+    background: black;
+    color: white;
+    transition: .25s;
+}
+
+.post .post_image{
+    width:40%;
+    height: 100%;
+    float:left;
+}
+
+
+.post .post_preview{
+    padding: 10px;
+}
+
+
+.article{
+    width:95%;
+    height:1000px;
+    margin: 10px auto;
+    border-radius: 5px;
+    background-image: linear-gradient(rgba(0,0,0,0.75), rgba(34, 33, 33, 0));
+    position: relative;
+}
+
+.article .post_image{
+    width:40%;
+    height: 315px;
+    float:left;
+}
+
+
+.article .text{
+    color: white;
+    padding: 5px;
+    text-align:left;
 }
 
 hr{
     margin: 0px;
 }
+
+
 
 #mesajeEroare {
     color: red
@@ -30,7 +210,7 @@ hr{
 }
 
 footer {
-    background-color: rgb(87, 87, 87);
+    background-image:linear-gradient(rgba(0,0,0,0.75), rgba(34, 33, 33, 0));
     text-align: center;
     font-size: medium;
     bottom:-2.5em;
@@ -39,7 +219,7 @@ footer {
 }
 
 footer p{
-    color: darkgray;
+    color: white;
 }
 
 #chestionar{
@@ -84,7 +264,7 @@ footer p{
       padding: 10px 20px;
       font-family: sans-serif, Arial;
       font-size: 16px;
-      border: 2px solid #444;
+      border: 2px solid white;
       border-radius: 4px;
   }
   
@@ -93,7 +273,7 @@ footer p{
   }
   
   .varianta input[type="radio"]:focus + label {
-      border: 2px dashed #444;
+      border: 2px dashed black;
   }
   
   .varianta input[type="radio"]:checked + label {
@@ -102,7 +282,7 @@ footer p{
   }
 
   .varianta input[type="checkbox"]:focus + label {
-    border: 2px solid #444;
+    border: 2px solid white;
 }
 
 .varianta input[type="checkbox"]:checked + label {
@@ -112,7 +292,7 @@ footer p{
 
 #chestionar button
 {
-    background-color: #555555;
+    background-image:linear-gradient(rgba(0,0,0,0.75), rgba(34, 33, 33, 0));
     border: none;
     color: white;
     padding: 15px 32px;
@@ -129,7 +309,7 @@ footer p{
     transition: all 500ms ease-out;
     border: 2px solid lightblue;
     background-color: aliceblue;
-    color: #555555;
+    color: white;
 }
 #rezultat-chestionar li
 {
@@ -137,5 +317,7 @@ footer p{
     border: none;
     text-align: left;
     margin-left: 43%;
+    color: white;
 
 }
+
